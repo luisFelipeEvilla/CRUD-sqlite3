@@ -37,8 +37,8 @@ router.post('/', (req, res) => {
     db.serialize(()=> {
         db.run(query, params, (err,rows) => {
         if (err) {
-            console.log(err);
-            res.send("Error Creando el recuro")
+          console.log(err);
+          return res.send("Error Creando el recuro")
         }
 
         res.send("Recurso creado correctamente")
@@ -62,7 +62,7 @@ router.put('/:id', (req, res) => {
         db.run(query, params, (err,rows) => {
         if (err) {
             console.log(err);
-            res.send("Error actualizando el recurso")
+          return res.send("Error actualizando el recurso")
         }
 
         res.send("Recurso actualizado correctamente")
@@ -80,7 +80,7 @@ router.delete('/:id', (req, res) => {
         db.run(query, params, (err,rows) => {
         if (err) {
             console.log(err);
-            res.send("Error Eliminando el recurso")
+           return res.send("Error Eliminando el recurso")
         }
 
         res.send("Recurso eliminado correctamente")
