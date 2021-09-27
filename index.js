@@ -7,10 +7,12 @@ const { db } = require('./db/index')
 const padres = require('./routes/padres');
 const hijos = require('./routes/hijos');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/', (req, res) => {
     res.send('hola mundo');
