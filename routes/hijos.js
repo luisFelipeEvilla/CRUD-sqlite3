@@ -18,8 +18,10 @@ router.get('/sinpadre', (req, res) => {
         db.all(`SELECT * FROM \"Hijos\" WHERE hijode IS NULL`, (err, rows) => {
         if (err) {
           console.error(err.message);
+          return res.send("Error de parte del servidor").status(500)
         }
-        res.send(rows)
+
+        res.send(rows).status(200)
       });
     })
 })
@@ -38,10 +40,10 @@ router.post('/', (req, res) => {
         db.run(query, params, (err,rows) => {
         if (err) {
           console.log(err);
-          return res.send("Error Creando el recuro")
+          return res.send("Error Creando el recuro").status(500)
         }
 
-        res.send("Recurso creado correctamente")
+        res.send("Recurso creado correctamente").status(200)
       });
     })
 })
@@ -82,10 +84,10 @@ router.put('/:id', (req, res) => {
         db.run(query, params, (err,rows) => {
         if (err) {
             console.log(err);
-          return res.send("Error actualizando el recurso")
+          return res.send("Error actualizando el recurso").status(500)
         }
 
-        res.send("Recurso actualizado correctamente")
+        res.send("Recurso actualizado correctamente").status(200)
       });
     })
 })
@@ -100,10 +102,10 @@ router.delete('/:id', (req, res) => {
         db.run(query, params, (err,rows) => {
         if (err) {
             console.log(err);
-           return res.send("Error Eliminando el recurso")
+           return res.send("Error Eliminando el recurso").status(500)
         }
 
-        res.send("Recurso eliminado correctamente")
+        res.send("Recurso eliminado correctamente").status(200)
       });
     })
 })
