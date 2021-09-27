@@ -12,15 +12,35 @@ router.get('/', (req, res) => {
     })
 })
 
-router.get('/:id/hijos', (req, res) => {
+router.get('/:id', (req, res) => {
     const id = req.params.id
 
+    const query = `SELECT * FROM "Padres" WHERE id = ?`
+    const params = [id]
+
     db.serialize(() => {
-        db.all(`SELECT * FROM \"Hijos\" WHERE hijode=${id}`, (err, rows) => {
+        db.get(query, params, (err, row) => {
             if (err) {
-                console.error(err.message);
+                return res.send(`Error de lado del servidor`).status(500)
             }
-            res.send(rows)
+
+            const padre = row
+
+            if (padre == null) {
+                return res.send(`Error, el padre con el id ${id} no existe`).status(404)
+            }
+
+            const query  = `SELECT * FROM "Hijos" WHERE hijode = ?`
+            const params = [padre.id]
+            
+            db.all(query, params, (err, rows) => {
+                if (err) {
+                    console.error(err.message);
+                }
+
+                padre.hijos = rows;
+                res.send(padre).status(200)
+            })
         });
     })
 })
@@ -38,6 +58,7 @@ router.get('/sinhijos', (req, res) => {
         db.all(query, (err, rows) => {
             if (err) {
                 console.error(err.message);
+
             }
             res.send(rows)
         });

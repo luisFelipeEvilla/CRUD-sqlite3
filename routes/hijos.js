@@ -46,6 +46,26 @@ router.post('/', (req, res) => {
     })
 })
 
+router.get('/:id', (req,res) => {
+
+  const id = req.params.id
+
+  const query = `SELECT * FROM Hijos WHERE id = ?`;
+  const params = [id]
+
+  db.get(query,params, (err, row) => {
+    if (err) {
+      return res.send(`Error del lado del servidor`).status(500)
+    } 
+
+    if (row == null) {
+      return res.send(`Error, el hijo con el id ${id} no existe`).status(404)
+    }
+
+    res.send(row).status(200)
+   })
+})
+
 router.put('/:id', (req, res) => {
 
     const id = req.params.id
