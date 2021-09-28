@@ -135,17 +135,27 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
     const id = req.params.id
 
-    const query = `DELETE FROM "Padres" WHERE id=?;`;
-    const params = [id];
-
+    const query = `UPDATE "Hijos" SET hijode = ? WHERE hijode=?;`;
+    const params = [null, id];
+    
     db.serialize(() => {
         db.run(query, params, (err, rows) => {
             if (err) {
                 console.log(err);
-                return res.send("Error Eliminando el recurso").status(500)
+                return res.send("Error Eliminando el padre de los hijos").status(500)
             }
 
-            res.send("Recurso eliminado correctamente").status(200)
+            const query = `DELETE FROM "Padres" WHERE id=?;`;
+            const params = [id];
+
+            db.run(query, params, (err, rows) => {
+                if (err) {
+                    console.log(err);
+                    return res.send("Error Eliminando el padre").status(500)
+                }  
+
+                res.send("Recurso eliminado correctamente").status(200)
+            })
         });
     })
 })
