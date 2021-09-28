@@ -64,7 +64,20 @@ router.get('/:id', (req,res) => {
       return res.send(`Error, el hijo con el id ${id} no existe`).status(404)
     }
 
-    res.send(row).status(200)
+    const hijo = row
+
+    const query = `SELECT * FROM Padres WHERE id = ?`;
+    const params = [hijo.hijode]
+
+    db.get(query, params, (err, row) => {
+      if (err) {
+        return res.send(`Error del lado del servidor`).status(500)
+      } 
+
+      hijo.padre = row;
+
+      res.send(hijo).status(200)
+    })
    })
 })
 
