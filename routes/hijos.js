@@ -3,8 +3,15 @@ const { db } = require('../db/index');
 const { post } = require('./padres');
 
 router.get('/', (req, res) => {
-  const query = `SELECT h.id, h.nombre, p.id as idPadre,
-     p.nombre as nombrePadre FROM "Hijos" h INNER JOIN "Padres" p ON (hijode = p.id)`;
+  const query = `SELECT h.id,
+  h.nombre,
+  h.hijode AS idPadre,
+  (
+      SELECT nombre
+        FROM Padres
+       WHERE id = h.hijode
+  ) AS nombrePadre
+  FROM Hijos h;`;
 
   db.serialize(() => {
     db.all(query, (err, rows) => {
